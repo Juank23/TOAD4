@@ -30,7 +30,7 @@ As this is a virtual serial device the baud rate etc is immaterial and no attemp
 be made to set it.
 
 
-Chapter 2 - Protocol Over View
+Chapter 2 - Protocol Overview
 
 The protocol is binary (as opposed to text) for efficiency and space considerations and
 thus it is futile to try to communicate with TOAD4 using a terminal, besides timing
@@ -48,23 +48,23 @@ If a complete message is not received within 21.7 msec TOAD4 for disregard all
 bytes received so far and will start to look for a byte with the MSB set.
 
 If TOOAD4 does not respond or responds badly the master needs to
-keep a pause longer than XX msec and then start with a new complete message.
+keep a pause longer than 21.7 msec msec and then start with a new complete message.
 
-This import to synchronize both ends of the communication, both initially
+This is important to synchronize both ends of the communication, both initially
 or in case of an error (note that since this is a virtual serial port on top
 of USB protocol communication errors are very, very rare).
 
 Chapter 3 - Message Format
 
 A message is a series of bytes that is preceded with a byte that has the MSB bit set
-and lower seven LSB bits contain the line length and followed by a check sum. The
+and lower seven LSB bits contain the message length and followed by a check sum. The
 maximum length of a message all bytes included is 32 bytes. 
 
 The length does not include the length byte itself i.e. it is the number of bytes
 TOAD4 will read after seeing the first byte of the message before attempting to
 interpret the message.
 
-The check sum is a simple 8 bit unsigned sum of the pay load of the message i.e. the
+The checksum is a simple 8 bit unsigned sum of the pay load of the message i.e. the
 sum of all bytes excluding the first (the length) and last (the checksum) bytes with
 a seed value of hex 0x55 for the sum.
 
@@ -117,7 +117,7 @@ This gives the slowest possible step rate of about one step every 5th
 second and highest step rate of little over 11 kHz.
              
  Note that there is jitter in the generated step signal which is 
- proportional  to the step rate. For a speed  value of S the jitter 
+ proportional  to the step rate. For a speedvalue of S the jitter 
  max is in the ball park of S/65536 * 100% percentage. Depending on 
  the stepper motor and mechanics jitter is the limiting factor
  for highspeed operation.
@@ -129,7 +129,7 @@ Most commands are executed as soon as they are interpreted but movement commands
 are queued and synchronized. This means that up to 16 movement commands can be
 sent to the TOAD4 and it will execute those commands one after the other as
 the movements are completed. Synchronizing ensures that movement commands are 
-executed before previous move commands for all motors have completed.  
+not executed until previous move commands for all motors have completed.  
 
 4.5 - Movement/queue synchronization
 
@@ -195,7 +195,7 @@ Id:         The command number (shift left three times and stick to first byte w
 Parameters: Short description of the parameters the command takes and their types:
 Returns:    Short description of the return values and their types 
 
-Paramter type coding:
+Parameter type coding:
             (B)  Byte (Unsigne 8 bits)
             (DB) Double Byte (16 bits, MSB first)
             (QB) Quad byte (32 bits, MSB first)
@@ -542,9 +542,9 @@ Description: This command returns the state (0/1) of the given input
 
 
 
-Rather trying to verbally describe this further I think it is best to refer
+Rather than trying to verbally describe this further I think it is best to refer
 to the  Java code for the nitty-gritty details of communicating with TOAD4,
-See the classes in package 'eazycnc.toad4'.
+See the classes in package 'toad4'.
 
 
 
